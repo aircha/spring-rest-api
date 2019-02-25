@@ -1,6 +1,7 @@
 package me.aircha.restapi.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.aircha.restapi.common.TestDescription;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +31,7 @@ public class EventControllerTest {
     ObjectMapper objectMapper;
 
     @Test
+    @TestDescription("정상적으로 입력하는 경우의 테스트")
     public void createEvent() throws Exception {
         EventDto eventDto = EventDto.builder()
                 .name("Spring")
@@ -59,6 +61,7 @@ public class EventControllerTest {
     }
 
     @Test
+    @TestDescription("입력 받을 수 없는 값을 사용한 경우의 테스트")
     public void createEventBadRequest() throws Exception {
         Event event = Event.builder()
                 .id(100)
@@ -86,6 +89,7 @@ public class EventControllerTest {
     }
 
     @Test
+    @TestDescription("입력값이 비어 있는 경우의 테스트")
     public void createEventBadRequestEmptyInput() throws Exception {
         EventDto eventDto = EventDto.builder().build();
 
@@ -96,6 +100,7 @@ public class EventControllerTest {
     }
 
     @Test
+    @TestDescription("입력값이 잘못된 경우의 테스트")
     public void createEventBadRequestBadRequestWrongInput() throws Exception {
         EventDto eventDto = EventDto.builder()
                 .name("Spring")
