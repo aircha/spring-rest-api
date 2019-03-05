@@ -1,6 +1,7 @@
 package me.aircha.restapi.events;
 
 import lombok.*;
+import me.aircha.restapi.accounts.Account;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -30,6 +31,8 @@ class Event {
     private boolean free;
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus = EventStatus.DRAFT;
+    @ManyToOne
+    private Account manager;
 
     void update() {
         this.free = this.basePrice == 0 && this.maxPrice == 0;
