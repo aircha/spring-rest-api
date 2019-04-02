@@ -1,5 +1,6 @@
 package me.aircha.restapi.accounts;
 
+import me.aircha.restapi.common.AppProperties;
 import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,21 +33,22 @@ public class AccountServiceTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private AppProperties appProperties;
+
     @Test
     public void findByUsername() {
-        String password = "jhcha";
-        String username = "jhcha@datastreams.co.kr";
         Account account = Account.builder()
-                .email(username)
-                .password(password)
+                .email(appProperties.getAdminUsername())
+                .password(appProperties.getAdminPassword())
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
         this.accountService.saveAccount(account);
 
         UserDetailsService userDetailsService = accountService;
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(appProperties.getAdminUsername());
 
-        assertThat(this.passwordEncoder.matches(password, userDetails.getPassword())).isTrue();
+        assertThat(this.passwordEncoder.matches(appProperties.getAdminPassword(), userDetails.getPassword())).isTrue();
     }
 
     @Test

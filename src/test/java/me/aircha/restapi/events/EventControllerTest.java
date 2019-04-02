@@ -4,6 +4,7 @@ import me.aircha.restapi.accounts.Account;
 import me.aircha.restapi.accounts.AccountRepository;
 import me.aircha.restapi.accounts.AccountRole;
 import me.aircha.restapi.accounts.AccountService;
+import me.aircha.restapi.common.AppProperties;
 import me.aircha.restapi.common.BaseControllerTest;
 import me.aircha.restapi.common.TestDescription;
 import org.hamcrest.Matchers;
@@ -43,6 +44,9 @@ public class EventControllerTest extends BaseControllerTest {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private AppProperties appProperties;
 
     @Before
     public void setUp() {
@@ -139,22 +143,17 @@ public class EventControllerTest extends BaseControllerTest {
     }
 
     private String getAccessToken() throws Exception {
-        String username = "jhcha@datastreams.co.kr";
-        String password = "jhcha";
         Account jhcha = Account.builder()
-                .email(username)
-                .password(password)
+                .email(appProperties.getAdminUsername())
+                .password(appProperties.getAdminPassword())
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
         this.accountService.saveAccount(jhcha);
 
-        String clientId = "myApp";
-        String clientSecret = "pass";
-
         ResultActions perForm = this.mockMvc.perform(MockMvcRequestBuilders.post("/oauth/token")
-                .with(httpBasic(clientId, clientSecret))
-                .param("username", username)
-                .param("password", password)
+                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
+                .param("username", appProperties.getAdminUsername())
+                .param("password", appProperties.getAdminPassword())
                 .param("grant_type", "password"));
 
         var responseBody = perForm.andReturn().getResponse().getContentAsString();

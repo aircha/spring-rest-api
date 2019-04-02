@@ -28,9 +28,9 @@ public class AccountService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Account saveAccount(Account account) {
+    public void saveAccount(Account account) {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
-        return accountRepository.save(account);
+        accountRepository.save(account);
     }
 
     @Override
